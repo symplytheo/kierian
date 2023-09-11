@@ -46,13 +46,16 @@ const confirmTransaction = async (req, res) => {
     // update wallet balances
     const senderWallet = await Wallet.findOne({ id: transaction.sender_wallet_id });
     if (transaction.amount > senderWallet.balance) {
-      return res.status(400).json({ success: false, error: 'insufficent wallet balance' });
+      // update transaction status - fail
+      await transaction.updateOne({ status: 'fail' });
+      // return
+      return res.status(403).json({ success: false, error: 'insufficent wallet balance' });
     }
     await senderWallet.updateOne({ balance: senderWallet.balance - transaction.amount });
     // update destination wallet balance
     const destWallet = await Wallet.findOne({ id: transaction.destination_wallet_id });
     await destWallet.updateOne({ balance: destWallet.balance + transaction.amount });
-    // update transaction status
+    // update transaction status - success
     await transaction.updateOne({ status: 'success' });
     // response
     return res.status(200).json({ success: true, data: transaction });
@@ -64,7 +67,7 @@ const confirmTransaction = async (req, res) => {
 const getUserTransactions = async (req, res) => {
   try {
     const wallet = await Wallet.findOne({ user_id: req.user._id });
-    // get all transactions that involve auth user's wallet id 
+    // get all transactions that involve auth user's wallet id
     // either as a sender_wallet or destination_wallet
     const transactions = await Transaction.find({
       $or: [{ sender_wallet_id: wallet.id }, { destination_wallet_id: wallet.id }],
@@ -79,8 +82,14 @@ const getUserTransactions = async (req, res) => {
 const getSingleTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findOne({ _id: req.params.id });
+    // get sender info
+    const senderWallet = await Wallet.findOne({ id: transaction.sender_wallet_id });
+    const sender = await User.findOne({ _id: senderWallet.user_id });
+    // get destination info
+    const destWallet = await Wallet.findOne({ id: transaction.destination_wallet_id });
+    const destination = await User.findOne({ _id: destWallet.user_id });
     // response
-    return res.status(200).json({ success: true, data: transaction });
+    return res.status(200).json({ success: true, data: { ...transaction.toObject(), sender, destination } });
   } catch (err) {
     errorHandler(err, res, 'user');
   }
