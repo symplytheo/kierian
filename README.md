@@ -54,7 +54,7 @@ A transaction API
 
 #### NOTES
 
-- No Free SMS Provider API to send OTP. So for this test purpose, the OTP is sent as part of the response when an account is created.
+- No Free SMS Provider API to send OTP. So for this test purpose, the OTP is sent as part of the response when a transaction is created.
 
 - Other endpoints for functionalities like: `Reset PIN`, `Resend OTP for transaction`, etc were not included.
 
