@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { authRouter, trxnRouter } = require('./routes');
 require('dotenv').config();
 
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 3000;
     .catch((err) => console.log(`[DB/ERROR]: ${err}`));
 })(); // ========================
 
+//  enable CORS
+app.use(cors({ origin: '*', credentials: true, optionsSuccessStatus: 200 }));
 // parse application/json
 app.use(express.json({ limit: '50mb' }));
 // parse application/x-www-form-urlencoded
