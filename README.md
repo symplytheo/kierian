@@ -6,6 +6,7 @@ A transaction API
 
 - NodeJS
 - ExpressJS
+- Vercel for deployment
 
 ### Documentation
 
@@ -23,7 +24,7 @@ A transaction API
 
 2. POST `/auth/login` logs the user in. Request body requires `phone` and `pin`.
 
-3. GET `/auth/me` returns the user details including wallet info. Requires authorization token in the headers. `Bearer token`
+3. GET `/auth/me` returns the user details including wallet info. Requires authorization token in the headers. `Bearer token` is required
 
 ======== TRANSACTION ROUTES ======
 
@@ -57,4 +58,4 @@ A transaction API
 
 - Other endpoints for functionalities like: `Reset PIN`, `Resend OTP for transaction`, etc were not included.
 
-DEMO LINK Base Url: [https](https)
+DEMO LINK Base Url: [kierian.vercel.app](kierian.vercel.app)
