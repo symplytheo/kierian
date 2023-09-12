@@ -1,6 +1,8 @@
-# Kierian
+# Kierian tech challenge
 
 A transaction API
+
+> A microservice challenge for a Software Engineer role
 
 ## Technologies Used
 
